@@ -32,10 +32,8 @@ exports.getMaintenanceLogin = async (req, res) => {
       }
 
       try {
-        // 🔑 Correct path: feed -> entry -> content -> m:properties
-        let entry = result.feed.entry;
 
-        // entry can be a single object or an array
+        let entry = result.feed.entry;
         if (Array.isArray(entry)) {
           entry = entry[0];
         }
@@ -48,7 +46,8 @@ exports.getMaintenanceLogin = async (req, res) => {
         console.log('🧩 [5] Parsed SAP data:', { id, notification_no, status });
 
         return res.status(200).json({
-          status: status
+          status: status,
+          notification_no: notification_no
         });
 
       } catch (parseError) {
