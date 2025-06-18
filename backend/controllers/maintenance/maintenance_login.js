@@ -1,5 +1,6 @@
 const axios = require('axios');
 const xml2js = require('xml2js');
+const jwt = require('jsonwebtoken');
 
 exports.getMaintenanceLogin = async (req, res) => {
   console.log('🔵 [1] Received login request');
@@ -32,7 +33,6 @@ exports.getMaintenanceLogin = async (req, res) => {
       }
 
       try {
-
         let entry = result.feed.entry;
         if (Array.isArray(entry)) {
           entry = entry[0];
@@ -45,10 +45,24 @@ exports.getMaintenanceLogin = async (req, res) => {
 
         console.log('🧩 [5] Parsed SAP data:', { id, notification_no, status });
 
-        return res.status(200).json({
-          status: status,
-          notification_no: notification_no
-        });
+        if (status === 'SUCCESS') {
+          const token = jwt.sign(
+            { id, username }, 
+            process.env.JWT_SECRET,
+            { expiresIn: '30m' }
+          );
+
+          return res.status(200).json({
+            status: status,
+            notification_no: notification_no,
+            token: token 
+          });
+        } else {
+          return res.status(401).json({
+            status: status,
+            message: 'Invalid credentials according to SAP'
+          });
+        }
 
       } catch (parseError) {
         console.error('🔴 Failed to extract properties:', parseError);

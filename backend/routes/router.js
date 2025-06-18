@@ -8,8 +8,10 @@ const {getMaintenanceLogin} = require('../controllers/maintenance/maintenance_lo
 const {getMaintenanceNotification} = require('../controllers/maintenance/notification');
 const {getWorkOrders} = require('../controllers/maintenance/work_order');
 
+const verifyToken = require('../auth');
+
 router.post('/login', getMaintenanceLogin);
-router.post('/notification', getMaintenanceNotification);
-router.post('/work-orders', getWorkOrders);
+router.post('/notification', verifyToken, getMaintenanceNotification);
+router.post('/work-orders', verifyToken, getWorkOrders);
 
 module.exports = router;
