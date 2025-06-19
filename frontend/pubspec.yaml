@@ -11,6 +11,7 @@ environment:
 dependencies:
   http: ^1.2.1
   shared_preferences: ^2.0.15
+  google_fonts: ^6.1.0
   flutter:
     sdk: flutter
 
@@ -29,4 +30,5 @@ flutter:
 
   assets:
     - assets/background.jpg
+    - assets/background2.jpg
     - assets/logo.png

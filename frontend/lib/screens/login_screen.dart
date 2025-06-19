@@ -14,7 +14,7 @@ class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController _passwordController = TextEditingController();
 
   bool _isLoading = false;
-  bool _rememberMe = false;
+  final bool _rememberMe = false;
 
   Future<void> _login() async {
     setState(() {
