@@ -104,7 +104,7 @@ class _NotificationPageState extends State<NotificationPage> {
             'Notification Data',
             style: GoogleFonts.poppins(
               textStyle: const TextStyle(
-                fontSize: 35,
+                fontSize: 25,
                 fontWeight: FontWeight.bold,
               ),
             ),
@@ -141,7 +141,7 @@ class _NotificationPageState extends State<NotificationPage> {
                   scrollDirection: Axis.horizontal,
                   child: DataTable(
                     headingRowColor:
-                        MaterialStateProperty.all(const Color.fromARGB(255, 132, 0, 0)),
+                        WidgetStateProperty.all(const Color.fromARGB(255, 132, 0, 0)),
                     headingTextStyle: GoogleFonts.poppins(
                       textStyle: const TextStyle(
                         fontWeight: FontWeight.bold,
@@ -175,7 +175,7 @@ class _NotificationPageState extends State<NotificationPage> {
                         }).toList(),
                       );
                     }).toList(),
-                    dataRowColor: MaterialStateProperty.all(Colors.white),
+                    dataRowColor: WidgetStateProperty.all(Colors.white),
                     dataTextStyle: GoogleFonts.poppins(
                       textStyle: const TextStyle(color: Colors.black),
                     ),

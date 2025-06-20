@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'NotificationPage.dart'; // ✅ your updated page
-import 'WorkOrderPage.dart'; // replace with your WorkOrderPage when ready
-import '../services/auth_service.dart'; // for logout (optional but clean)
+import 'NotificationPage.dart';
+import 'WorkOrderPage.dart';
+import 'login_screen.dart'; // ✅ import your LoginScreen
 
 class DashboardScreen extends StatelessWidget {
   const DashboardScreen({super.key});
@@ -13,11 +13,11 @@ class DashboardScreen extends StatelessWidget {
     await prefs.remove('jwt_expiry');
     await prefs.remove('username');
 
-    // ✅ Or use your AuthService.logout() if you like
-    // await AuthService().logout();
-
-    // Navigate to login
-    Navigator.of(context).pushNamedAndRemoveUntil('/', (route) => false);
+    // ✅ Use explicit pushReplacement to go back to LoginScreen
+    Navigator.of(context).pushAndRemoveUntil(
+      MaterialPageRoute(builder: (_) => const LoginScreen()),
+      (route) => false,
+    );
   }
 
   @override
@@ -45,63 +45,102 @@ class DashboardScreen extends StatelessWidget {
             ),
           ),
           Container(color: Colors.black.withOpacity(0.4)),
-          Padding(
-            padding: const EdgeInsets.all(32.0),
-            child: Row(
-              children: [
-                Expanded(
-                  flex: 2,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: const [
-                      Text(
-                        'Maintenance Portal',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 60,
-                          fontWeight: FontWeight.bold,
+
+          // Responsive content
+          LayoutBuilder(
+            builder: (context, constraints) {
+              bool isWide = constraints.maxWidth >= 800;
+
+              return Padding(
+                padding: const EdgeInsets.all(32.0),
+                child: isWide
+                    ? Row(
+                        children: [
+                          // Left panel
+                          Expanded(
+                            flex: 2,
+                            child: _buildTextPanel(),
+                          ),
+                          // Right cards
+                          Expanded(
+                            flex: 3,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: [
+                                _buildCard(
+                                  context: context,
+                                  title: 'Notification',
+                                  description: 'View all your recent notifications.',
+                                  icon: Icons.notifications,
+                                  pageBuilder: () => const NotificationPage(),
+                                ),
+                                const SizedBox(width: 30),
+                                _buildCard(
+                                  context: context,
+                                  title: 'Work Order',
+                                  description: 'Manage and track work orders.',
+                                  icon: Icons.work,
+                                  pageBuilder: () => const WorkOrderPage(),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      )
+                    : SingleChildScrollView(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            _buildTextPanel(),
+                            const SizedBox(height: 40),
+                            _buildCard(
+                              context: context,
+                              title: 'Notification',
+                              description: 'View all your recent notifications.',
+                              icon: Icons.notifications,
+                              pageBuilder: () => const NotificationPage(),
+                            ),
+                            const SizedBox(height: 30),
+                            _buildCard(
+                              context: context,
+                              title: 'Work Order',
+                              description: 'Manage and track work orders.',
+                              icon: Icons.work,
+                              pageBuilder: () => const WorkOrderPage(),
+                            ),
+                          ],
                         ),
                       ),
-                      SizedBox(height: 20),
-                      Text(
-                        'Check your notifications and work orders',
-                        style: TextStyle(
-                          color: Colors.white70,
-                          fontSize: 20,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                Expanded(
-                  flex: 3,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      _buildCard(
-                        context: context,
-                        title: 'Notification',
-                        description: 'View all your recent notifications.',
-                        icon: Icons.notifications,
-                        pageBuilder: () => const NotificationPage(),
-                      ),
-                      const SizedBox(width: 30),
-                      _buildCard(
-                        context: context,
-                        title: 'Work Order',
-                        description: 'Manage and track work orders.',
-                        icon: Icons.work,
-                        pageBuilder: () => const WorkOrderPage(), // Replace with WorkOrderPage()
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
+              );
+            },
           ),
         ],
       ),
+    );
+  }
+
+  Widget _buildTextPanel() {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: const [
+        Text(
+          'Maintenance \nPortal',
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: 40,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        SizedBox(height: 20),
+        Text(
+          'Check your notifications and work orders',
+          style: TextStyle(
+            color: Colors.white70,
+            fontSize: 20,
+          ),
+        ),
+      ],
     );
   }
 
@@ -123,6 +162,7 @@ class DashboardScreen extends StatelessWidget {
       },
       child: Container(
         width: 260,
+        margin: const EdgeInsets.only(bottom: 20),
         padding: const EdgeInsets.all(24),
         decoration: BoxDecoration(
           color: Colors.white.withOpacity(0.9),
@@ -166,3 +206,4 @@ class DashboardScreen extends StatelessWidget {
     );
   }
 }
+

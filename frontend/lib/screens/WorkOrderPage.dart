@@ -76,7 +76,7 @@ class _WorkOrderPageState extends State<WorkOrderPage> {
           'Work Order Data',
           style: GoogleFonts.poppins(
             textStyle: const TextStyle(
-              fontSize: 35,
+              fontSize: 25,
               fontWeight: FontWeight.bold,
             ),
           ),
@@ -113,7 +113,7 @@ class _WorkOrderPageState extends State<WorkOrderPage> {
                   scrollDirection: Axis.horizontal,
                   child: DataTable(
                     headingRowColor:
-                        MaterialStateProperty.all(const Color.fromARGB(255, 132, 0, 0)),
+                        WidgetStateProperty.all(const Color.fromARGB(255, 132, 0, 0)),
                     headingTextStyle: GoogleFonts.poppins(
                       textStyle: const TextStyle(
                         fontWeight: FontWeight.bold,
@@ -148,7 +148,7 @@ class _WorkOrderPageState extends State<WorkOrderPage> {
                       );
                     }).toList(),
                     dataRowColor:
-                        MaterialStateProperty.all(Colors.white),
+                        WidgetStateProperty.all(Colors.white),
                     dataTextStyle: GoogleFonts.poppins(
                       textStyle: const TextStyle(color: Colors.black),
                     ),

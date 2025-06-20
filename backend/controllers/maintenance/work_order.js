@@ -26,7 +26,7 @@ exports.getWorkOrders = async (req, res) => {
 
     const xml = response.data;
 
-    // Parse the Atom XML to JS object
+
     const parser = new xml2js.Parser({
       explicitArray: false, // flatten arrays where possible
       ignoreAttrs: false
